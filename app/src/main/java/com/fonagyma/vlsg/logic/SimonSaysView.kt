@@ -111,21 +111,21 @@ class SimonSaysView(context: Context, width: Int, height: Int,val difficulty: In
 
                 paint.style = Paint.Style.FILL
                 paint.color= cyan
-                canvas.drawRect(RectF(0f,0f,surfaceSize.x,surfaceSize.x*.06f),paint)
+                canvas.drawRect(RectF(0f,0f,surfaceSize.x,surfaceSize.x*.04f),paint)
                 paint.color= orange
-                canvas.drawRect(RectF(0f,0f,surfaceSize.x*(gameTimer.get().toFloat()/TimeLimit.toFloat()),surfaceSize.x*.06f),paint)
+                canvas.drawRect(RectF(0f,0f,surfaceSize.x*(gameTimer.get().toFloat()/TimeLimit.toFloat()),surfaceSize.x*.04f),paint)
                 paint.style = Paint.Style.STROKE
                 paint.color= Color.argb(255,0,0,0)
-                canvas.drawRect(RectF(0f,0f,surfaceSize.x,surfaceSize.x*.06f),paint)
+                canvas.drawRect(RectF(0f,0f,surfaceSize.x,surfaceSize.x*.04f),paint)
 
                 paint.style = Paint.Style.FILL
                 paint.color= red
-                canvas.drawRect(RectF(0f,0f+surfaceSize.x*.06f,surfaceSize.x,surfaceSize.x*.06f+surfaceSize.x*.06f),paint)
+                canvas.drawRect(RectF(0f,0f+surfaceSize.x*.04f,surfaceSize.x,surfaceSize.x*.04f+surfaceSize.x*.04f),paint)
                 paint.color= green
-                canvas.drawRect(RectF(0f,0f+surfaceSize.x*.06f,surfaceSize.x*(livesLeft.toFloat()/livesMax.toFloat()),surfaceSize.x*.06f+surfaceSize.x*.06f),paint)
+                canvas.drawRect(RectF(0f,0f+surfaceSize.x*.04f,surfaceSize.x*(livesLeft.toFloat()/livesMax.toFloat()),surfaceSize.x*.04f+surfaceSize.x*.04f),paint)
                 paint.style = Paint.Style.STROKE
                 paint.color= Color.argb(255,0,0,0)
-                canvas.drawRect(RectF(0f,0f+surfaceSize.x*.06f,surfaceSize.x,surfaceSize.x*.06f+surfaceSize.x*.06f),paint)
+                canvas.drawRect(RectF(0f,0f+surfaceSize.x*.04f,surfaceSize.x,surfaceSize.x*.04f+surfaceSize.x*.04f),paint)
                 paint.style = Paint.Style.STROKE
                 paint.color=(Color.argb(255, 11, 10, 5))
 
@@ -192,7 +192,7 @@ class SimonSaysView(context: Context, width: Int, height: Int,val difficulty: In
                 paint.style = Paint.Style.FILL
                 paint.textSize=maxSquareHeight*.06f
                 //paint.color=(Color.argb(255, 11, 10, 5))
-                canvas.drawText("Time: ${gameTimer.get()/60000} : ${(gameTimer.get()/1000)%60}",maxSquareHeight*.1f, surfaceSize.y*.2f,paint)
+                canvas.drawText("Time: ${gameTimer.get()/60000} : ${(gameTimer.get()/1000)%60}",maxSquareHeight*.1f, surfaceSize.y*.12f,paint)
 
                 }else{
 
@@ -206,7 +206,7 @@ class SimonSaysView(context: Context, width: Int, height: Int,val difficulty: In
                     paint.color=(Color.argb(255, 11, 10, 5))
                     canvas.drawText("Time: ${gameTimer.get()/60000} : ${(gameTimer.get()/1000)%60}",maxSquareHeight*.1f, surfaceSize.y*.2f,paint)
                     canvas.drawText("Lives(left): $livesLeft",maxSquareHeight*.1f, surfaceSize.y*.4f,paint)
-                    canvas.drawText("Score: $score",maxSquareHeight*.1f, surfaceSize.y*.6f,paint)
+                    canvas.drawText("Score: $score($highScore)",maxSquareHeight*.1f, surfaceSize.y*.6f,paint)
                     if(win){
                         paint.color=green
                         canvas.drawText("You Won!",maxSquareHeight*.1f, surfaceSize.y*.8f,paint)

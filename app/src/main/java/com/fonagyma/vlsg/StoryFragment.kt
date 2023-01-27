@@ -23,8 +23,9 @@ class StoryFragment: Fragment() {
         _binding = FragmentStoryBinding.inflate(inflater, container, false)
 
         val images: IntArray = intArrayOf(
-            R.drawable.ic_launcher_background,
-            R.drawable.ic_baseline_info_24,
+            R.drawable.bevezetes,
+            R.drawable.utmutatas,
+            R.drawable.soksik,
             R.drawable.pen_droid)
 
         // Initialize our adapter

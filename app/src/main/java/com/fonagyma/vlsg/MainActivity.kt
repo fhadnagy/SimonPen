@@ -1,10 +1,13 @@
 package com.fonagyma.vlsg
 
 /**Készítette: Fónagy Márton Ádám
- * A cél az előző app átdolgozása lett volna, viszont nagy fába
- * vágtam a fejszém, sok rész amit kigondoltam nem ltt implementálva
- * pl.: A prefrenceSettings használata az app paramétereihez, adatbázis
- * a különböző játékosok adataihoz, "sandbox" tipusú játékmód
+ * Visszamentél az időben.Chernobylban találod magadat.
+ * A reaktor 5 perc múlva eléri a kritikus pontot ahonnan nincs visszaút.
+ * Habár ismered a jövőt, nem tudod figyelmeztetni a kezelőket, nincs se nyelvtudásod se időd.
+ * De még van esély megmenteni magad és a környéket.
+ * Egy titkos grafikus kulcssorozattal leállíthatod egyedül is a reaktort.
+ *
+ * Kövesd a felvillanó negyzeteket.Ismételd meg a gép utasításait. Az idő jelzi mikor utheted be a kódokat. De vigyázz, csak 3 szor hibázhatsz.
  */
 
 import android.os.Bundle
