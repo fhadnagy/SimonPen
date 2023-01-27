@@ -10,7 +10,6 @@ import com.fonagyma.vlsg.logic.SimonSaysView
 
 class SimonSaysFragment : Fragment() {
 
-
     private var _binding: FragmentSimonSaysBinding? = null
     private lateinit var gameView: SimonSaysView
     // This property is only valid between onCreateView and

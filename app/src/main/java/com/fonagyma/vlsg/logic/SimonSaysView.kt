@@ -12,15 +12,19 @@ import kotlin.math.pow
 import kotlin.math.sqrt
 import kotlin.random.Random
 
-class SimonSaysView(context: Context, width: Int, height: Int): SurfaceView(context), Runnable {
+class SimonSaysView(context: Context, width: Int, height: Int,val difficulty: Int,val size: Int): SurfaceView(context), Runnable {
     private lateinit var thread: Thread
     private lateinit var canvas: Canvas
     private var random = Random(System.currentTimeMillis())
     private var surfaceSize = PointF(width.toFloat(),height.toFloat())
     private var maxSquareHeight = min(surfaceSize.x,surfaceSize.y)
-    private var squareStartPointF= PointF(0f+(surfaceSize.x-maxSquareHeight)/2f,0f+(surfaceSize.y-maxSquareHeight)/2f)
-    private var squareRectF = RectF(squareStartPointF.x,squareStartPointF.y,squareStartPointF.x+maxSquareHeight,squareStartPointF.y+maxSquareHeight)
+    private var squareStartPointF= PointF(0f+(surfaceSize.x-maxSquareHeight)/2f+maxSquareHeight*.02f,0f+(surfaceSize.y-maxSquareHeight)/2f+maxSquareHeight*.02f)
+    private var squareRectF = RectF(squareStartPointF.x,squareStartPointF.y,squareStartPointF.x+maxSquareHeight*.96f,squareStartPointF.y+maxSquareHeight*.96f)
+    private var cellSize = maxSquareHeight/size
+
     private var paint = Paint()
+    private var paintTrue = Paint()
+    private var paintFalse = Paint()
     @Volatile
     private var drawing = false
     private var paused = false
@@ -30,13 +34,22 @@ class SimonSaysView(context: Context, width: Int, height: Int): SurfaceView(cont
     private var lastFrameMillis : Long = 0
     private var millis: Long= 0
     private var fps: Long = 0
+    private var showLengthMillis : Long = 1000
+    private var waitLengthMillis : Long = 1000
+
     private var gameTimer = Timer(0)
 
+    private var trueColor = Color.argb(255,255,0,0)
+    private var falseColor = Color.argb(255,0,255,0)
     private var score: Long = 0
+    private var highScore: Long = 0
 
     init{
-
+        paintTrue.color=trueColor
+        paintFalse.color=falseColor
+        //check for start parameter correctness
     }
+
     override fun run(){
         while(drawing){
             val frameStartTime = System.currentTimeMillis()
@@ -69,7 +82,7 @@ class SimonSaysView(context: Context, width: Int, height: Int): SurfaceView(cont
 
                 canvas.drawColor(Color.argb(255, 255, 255, 255))
 
-                /** TODO: Make this time bar
+                /** TODO: Make this time bar if needed time countdown
                 paint.style = Paint.Style.FILL
                 paint.color= Color.argb(255,255,0,0)
                 canvas.drawRect(RectF(0f,0f,surfaceSize.x,ratioHeight*1f),paint)
@@ -79,6 +92,23 @@ class SimonSaysView(context: Context, width: Int, height: Int): SurfaceView(cont
                 paint.color= Color.argb(255,0,0,0)
                 canvas.drawRect(RectF(0f,0f,surfaceSize.x,ratioHeight*1f),paint)
                 */
+                paint.style = Paint.Style.STROKE
+                paint.color=(Color.argb(255, 11, 10, 5))
+                for (x in 0 until size){
+                    for (y in 0 until size){
+                        if((x+y)%2==0)
+                        {
+                            canvas.drawRect(xyToRectF(x,y),paint)
+                        }else{
+
+                        }
+                    }
+                }
+
+                paint.style = Paint.Style.STROKE
+                paint.color=(Color.argb(255, 11, 10, 5))
+                canvas.drawRect(squareRectF,paint)
+
                 paint.style = Paint.Style.FILL
                 paint.textSize=maxSquareHeight/25f
                 paint.color=(Color.argb(255, 11, 10, 5))
@@ -96,6 +126,11 @@ class SimonSaysView(context: Context, width: Int, height: Int): SurfaceView(cont
             holder.unlockCanvasAndPost(canvas)
         }
     }
+
+    private fun xyToRectF(x: Int, y: Int): RectF {
+        return RectF(squareStartPointF.x+cellSize*x,squareStartPointF.y+cellSize*y,squareStartPointF.x+cellSize*(x+1),squareStartPointF.y+cellSize*(y+1))
+    }
+
     private fun update(millis: Long){
 
     }
