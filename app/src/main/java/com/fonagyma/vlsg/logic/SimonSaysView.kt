@@ -6,11 +6,7 @@ import android.graphics.*
 import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceView
-import com.fonagyma.vlsg.R
 import java.lang.Float.min
-import kotlin.math.floor
-import kotlin.math.pow
-import kotlin.math.sqrt
 import kotlin.random.Random
 
 class SimonSaysView(context: Context, width: Int, height: Int,val difficulty: Int,val size: Int): SurfaceView(context), Runnable {
@@ -37,17 +33,42 @@ class SimonSaysView(context: Context, width: Int, height: Int,val difficulty: In
     private var fps: Long = 0
     private var showLengthMillis : Long = 1000
     private var waitLengthMillis : Long = 1000
+    private var betweenPixelsMillis : Long = 300
+    private var animationTimer = Timer(1000)
+
+    //flow control variables
+    private var waitingForInput = false
+    private var setNow = false
+    private var wait = false
+    private var currentDrawingScene = Array<Boolean>(size*size){false}
+    private var visibleKeys = Array<Boolean>(size*size){false}
+    private var lastPressedKey : Int = 0
+    private var lastPressedKeyMillis : Long = 0
+    private var round : Int = 1
+    private var nextKeyIndex : Int = 0
+    private var keys = Array<Int>(difficulty){0}
 
     private var gameTimer = Timer(0)
 
-    private var trueColor = Color.argb(255,255,0,0)
-    private var falseColor = Color.argb(255,0,255,0)
+    private var green = Color.argb(255,0,255,0)
+    private var red = Color.argb(255,255,0,0)
+    private var cyan = Color.argb(255,0,184,230)
+    private var orange = Color.argb(255,218,139,0)
+    private var accent = orange
+
     private var score: Long = 0
     private var highScore: Long = 0
 
     init{
-        paintTrue.color=trueColor
-        paintFalse.color=falseColor
+        paintTrue.color=green
+        paintFalse.color=cyan
+        for (k in 0 until difficulty){
+            keys[k]=random.nextInt(size*size)
+            Log.d("key","${keys[k]}")
+        }
+        round=1
+        waitingForInput=false
+        wait=false
         //check for start parameter correctness
     }
 
@@ -70,6 +91,7 @@ class SimonSaysView(context: Context, width: Int, height: Int,val difficulty: In
 
             if(millis>0){
                 fps=1000/millis
+                //Log.d("fps","$fps")
             }
         }
     }
@@ -95,14 +117,51 @@ class SimonSaysView(context: Context, width: Int, height: Int,val difficulty: In
                 */
                 paint.style = Paint.Style.STROKE
                 paint.color=(Color.argb(255, 11, 10, 5))
+
+                if (waitingForInput){
+                    for (x in 0 until size){
+                        for (y in 0 until size){
+                            if (lastPressedKeyMillis>1 && x+(y*size)==lastPressedKey)
+                            {
+                                paintTrue.color=accent
+                                canvas.drawRect(xyToRectF(x,y),paintTrue)
+                                paintTrue.color=green
+                                continue
+                            }
+                            if(currentDrawingScene[x+(y*size)])
+                            {
+                                canvas.drawRect(xyToRectF(x,y),paintTrue)
+                            }else{
+                                canvas.drawRect(xyToRectF(x,y),paintFalse)
+                            }
+                        }
+                    }
+                }else{
+                    for (x in 0 until size){
+                        for (y in 0 until size){
+                            if (lastPressedKeyMillis>1 && x+(y*size)==lastPressedKey)
+                            {
+                                paintTrue.color=accent
+                                canvas.drawRect(xyToRectF(x,y),paintTrue)
+                                paintTrue.color=green
+                                continue
+                            }
+                            if(visibleKeys[x+(y*size)])
+                            {
+                                canvas.drawRect(xyToRectF(x,y),paintTrue)
+                            }else{
+                                canvas.drawRect(xyToRectF(x,y),paintFalse)
+                            }
+                        }
+                    }
+                }
+                paint.strokeWidth=3f
+                paint.style=Paint.Style.STROKE
+                paint.color=(Color.argb(255, 11, 10, 5))
+
                 for (x in 0 until size){
                     for (y in 0 until size){
-                        if((x+y)%2==0)
-                        {
-                            canvas.drawRect(xyToRectF(x,y),paintTrue)
-                        }else{
-                            canvas.drawRect(xyToRectF(x,y),paintFalse)
-                        }
+                        canvas.drawRect(xyToRectF(x,y),paint)
                     }
                 }
 
@@ -110,9 +169,18 @@ class SimonSaysView(context: Context, width: Int, height: Int,val difficulty: In
                 paint.color=(Color.argb(255, 11, 10, 5))
                 canvas.drawRect(squareRectF,paint)
 
+                if (waitingForInput){
+                    paint.color=green
+                }else if(wait){
+                    paint.color=cyan
+                }else{
+                    paint.color=red
+                }
+
+
                 paint.style = Paint.Style.FILL
                 paint.textSize=maxSquareHeight/25f
-                paint.color=(Color.argb(255, 11, 10, 5))
+                //paint.color=(Color.argb(255, 11, 10, 5))
                 canvas.drawText("Time: ${gameTimer.get()/60000} : ${gameTimer.get()/1000}",maxSquareHeight*.4f, maxSquareHeight*.4f,paint)
 
                 }else{
@@ -140,7 +208,49 @@ class SimonSaysView(context: Context, width: Int, height: Int,val difficulty: In
     }
 
     private fun update(millis: Long){
+        animationTimer.decrease(millis)
+        lastPressedKeyMillis-=millis
 
+        if(animationTimer.get()<0){
+           if(!waitingForInput){
+               wait = if(wait){
+                   visibleKeys[keys[nextKeyIndex]]=true
+
+                   accent=orange
+                   lastPressedKey=keys[nextKeyIndex]
+                   lastPressedKeyMillis=150
+
+                   nextKeyIndex++
+                   animationTimer.increase(showLengthMillis)
+                   if(nextKeyIndex==round)
+                   {
+                       nextKeyIndex=0
+                       for(k in 0 until size*size){
+                           currentDrawingScene[k]=false
+                       }
+                       setNow=true
+                   }else{
+                       setNow=false
+                   }
+                   false
+               }else{
+                   if(setNow)
+                   {
+                       waitingForInput=true
+                       setNow=false
+                   }
+                   animationTimer.increase(waitLengthMillis)
+                   true
+               }
+           }else{
+               if (setNow)
+               {
+                   waitingForInput=false
+                   setNow=false
+               }
+               animationTimer.increase(waitLengthMillis)
+           }
+        }
     }
     fun pause() {
         // Set drawing to false
@@ -180,11 +290,59 @@ class SimonSaysView(context: Context, width: Int, height: Int,val difficulty: In
             MotionEvent.ACTION_DOWN) {
             if (gameOver){
                 gameTimer.set(0)
+                animationTimer.set(500)
+                nextKeyIndex=0
+                round= 1
+                for (k in 0 until size*size){
+                    visibleKeys[k]=false
+                    currentDrawingScene[k]=false
+                }
+                for (k in 0 until difficulty)
+                {
+                    keys[k]=random.nextInt(size*size)
+                    Log.d("key","${keys[k]}")
+                }
+                waitingForInput=false
+                wait=false
+                setNow=false
                 gameOver= false
                 paused=false
             }else {
                 var index = getCellIndex(PointF(motionEvent.x-squareStartPointF.x,motionEvent.y-squareStartPointF.y))
                 Log.d("getindex", "$index")
+                if (waitingForInput){
+                    if(!setNow)
+                    {
+                        if (nextKeyIndex<difficulty){
+                            if (index==keys[nextKeyIndex])
+                            {
+                                //hit right key
+                                accent=orange
+                                currentDrawingScene[index]=true
+                                nextKeyIndex++
+                            }else{
+                                //TODO: decrease hp if there is hp
+                                accent=red
+                            }
+                        }
+                        lastPressedKey=index
+                        lastPressedKeyMillis=150
+                        if(nextKeyIndex==round){
+                            round++
+                            setNow=true
+                            if (round<=difficulty)
+                            {
+                                for (k in 0 until round){
+                                    visibleKeys[keys[k]]=false
+                                }
+                            }else{
+                                gameOver=true
+                            }
+
+                            nextKeyIndex=0
+                        }
+                    }
+                }
             }
         }
         return true
