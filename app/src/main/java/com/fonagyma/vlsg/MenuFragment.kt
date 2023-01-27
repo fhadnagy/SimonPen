@@ -2,6 +2,7 @@ package com.fonagyma.vlsg
 
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -62,6 +63,11 @@ class MenuFragment: Fragment() {
 
         binding.playButton.setOnClickListener {
             val action = MenuFragmentDirections.actionMenuFragmentToPlaySettings()
+            findNavController().navigate(action)
+        }
+
+        binding.storyButton.setOnClickListener {
+            val action = MenuFragmentDirections.actionMenuFragmentToStoryFragment()
             findNavController().navigate(action)
         }
 

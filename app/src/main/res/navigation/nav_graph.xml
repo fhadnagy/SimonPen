@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_menuFragment_to_playSettings"
             app:destination="@id/playSettings" />
+        <action
+            android:id="@+id/action_menuFragment_to_storyFragment"
+            app:destination="@id/storyFragment" />
     </fragment>
     <fragment
         android:id="@+id/playSettings"
@@ -39,4 +42,9 @@
         android:name="com.fonagyma.vlsg.SimonSaysFragment"
         android:label="fragment_simon_says"
         tools:layout="@layout/fragment_simon_says" />
+    <fragment
+        android:id="@+id/storyFragment"
+        android:name="com.fonagyma.vlsg.StoryFragment"
+        android:label="Story"
+        tools:layout="@layout/fragment_story" />
 </navigation>

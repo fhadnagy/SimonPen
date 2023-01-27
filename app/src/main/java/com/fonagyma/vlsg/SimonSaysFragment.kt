@@ -35,13 +35,14 @@ class SimonSaysFragment : Fragment() {
         binding.root.addView(ldView)
         ldView.resume()*/
 
-        gameView = SimonSaysView(requireContext(),binding.root.display.width.toInt(),binding.root.display.height.toInt(),15,7)
+        gameView = SimonSaysView(requireContext(),binding.root.display.width.toInt(),binding.root.display.height.toInt(),15,7,true,10000, 3)
         binding.root.addView(gameView)
         gameView.resume()
 
     }
 
     override fun onDestroyView() {
+        (activity as? AppCompatActivity)?.supportActionBar?.show()
         super.onDestroyView()
         _binding = null
     }
