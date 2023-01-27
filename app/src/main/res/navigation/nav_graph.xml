@@ -41,7 +41,27 @@
         android:id="@+id/simonSaysFragment"
         android:name="com.fonagyma.vlsg.SimonSaysFragment"
         android:label="fragment_simon_says"
-        tools:layout="@layout/fragment_simon_says" />
+        tools:layout="@layout/fragment_simon_says" >
+        <argument
+            android:name="size"
+            app:argType="integer"
+            android:defaultValue="3" />
+        <argument
+            android:name="lives"
+            app:argType="integer"
+            android:defaultValue="3" />
+        <argument
+            android:name="difficulty"
+            app:argType="integer"
+            android:defaultValue="9" />
+        <argument
+            android:name="timeLimitSeconds"
+            android:defaultValue="90" />
+        <argument
+            android:name="replayable"
+            app:argType="boolean"
+            android:defaultValue="false" />
+    </fragment>
     <fragment
         android:id="@+id/storyFragment"
         android:name="com.fonagyma.vlsg.StoryFragment"

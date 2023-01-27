@@ -71,7 +71,7 @@ class SimonSaysView(context: Context, width: Int, height: Int,val difficulty: In
         }
         round=1
         waitingForInput=false
-        wait=false
+        wait=true
         //check for start parameter correctness
     }
 
@@ -199,21 +199,22 @@ class SimonSaysView(context: Context, width: Int, height: Int,val difficulty: In
                 canvas = holder.lockCanvas()
                 paint.style = Paint.Style.FILL
                 canvas.drawColor(Color.argb(255, 255, 255, 255))
+
                 if (gameOver){
                     paint.style = Paint.Style.FILL
                     paint.textSize=maxSquareHeight*.08f
-                    //paint.color=(Color.argb(255, 11, 10, 5))
-                    canvas.drawText("Time: ${gameTimer.get()/60000} : ${(gameTimer.get()/1000)%60}",maxSquareHeight*.3f, maxSquareHeight*.2f,paint)
-                    canvas.drawText("Lives(left): $livesLeft",maxSquareHeight*.3f, maxSquareHeight*.2f,paint)
-                    canvas.drawText("Score: $score",maxSquareHeight*.3f, maxSquareHeight*.2f,paint)
+                    paint.color=(Color.argb(255, 11, 10, 5))
+                    canvas.drawText("Time: ${gameTimer.get()/60000} : ${(gameTimer.get()/1000)%60}",maxSquareHeight*.1f, surfaceSize.y*.2f,paint)
+                    canvas.drawText("Lives(left): $livesLeft",maxSquareHeight*.1f, surfaceSize.y*.4f,paint)
+                    canvas.drawText("Score: $score",maxSquareHeight*.1f, surfaceSize.y*.6f,paint)
                     if(win){
-                        canvas.drawText("Lives(left): ${gameTimer.get()/60000} : ${(gameTimer.get()/1000)%60}",maxSquareHeight*.3f, maxSquareHeight*.2f,paint)
+                        paint.color=green
+                        canvas.drawText("You Won!",maxSquareHeight*.1f, surfaceSize.y*.8f,paint)
                     }else{
-                        canvas.drawText("Score: ${gameTimer.get()/60000} : ${(gameTimer.get()/1000)%60}",maxSquareHeight*.3f, maxSquareHeight*.2f,paint)
+                        paint.color=red
+                        canvas.drawText("Game Over!",maxSquareHeight*.1f, surfaceSize.y*.8f,paint)
 
                     }
-
-                }else {
 
                 }
             }
@@ -280,6 +281,7 @@ class SimonSaysView(context: Context, width: Int, height: Int,val difficulty: In
             }
             if (gameTimer.get()>TimeLimit || livesLeft<1){
                 gameOver=true
+                paused=true
                 win=false
             }
         }
@@ -329,31 +331,32 @@ class SimonSaysView(context: Context, width: Int, height: Int,val difficulty: In
         if (motionEvent.action and MotionEvent.ACTION_MASK ==
             MotionEvent.ACTION_DOWN) {
             if (gameOver){
-
-                if (score>highScore)
-                {
-                    highScore=score
+                if(replayable){
+                    if (score>highScore)
+                    {
+                        highScore=score
+                    }
+                    livesLeft=livesMax
+                    score=0
+                    gameTimer.set(0)
+                    animationTimer.set(2000)
+                    nextKeyIndex=0
+                    round= 1
+                    for (k in 0 until size*size){
+                        visibleKeys[k]=false
+                        currentDrawingScene[k]=false
+                    }
+                    for (k in 0 until difficulty)
+                    {
+                        keys[k]=random.nextInt(size*size)
+                        Log.d("key","${keys[k]}")
+                    }
+                    waitingForInput=false
+                    wait=false
+                    setNow=false
+                    gameOver= false
+                    paused=false
                 }
-                livesLeft=livesMax
-                score=0
-                gameTimer.set(0)
-                animationTimer.set(500)
-                nextKeyIndex=0
-                round= 1
-                for (k in 0 until size*size){
-                    visibleKeys[k]=false
-                    currentDrawingScene[k]=false
-                }
-                for (k in 0 until difficulty)
-                {
-                    keys[k]=random.nextInt(size*size)
-                    Log.d("key","${keys[k]}")
-                }
-                waitingForInput=false
-                wait=false
-                setNow=false
-                gameOver= false
-                paused=false
             }else {
                 var index = getCellIndex(PointF(motionEvent.x-squareStartPointF.x,motionEvent.y-squareStartPointF.y))
                 Log.d("getindex", "$index")
@@ -385,6 +388,7 @@ class SimonSaysView(context: Context, width: Int, height: Int,val difficulty: In
                                 }
                             }else{
                                 gameOver=true
+                                paused=true
                                 win=true
                                 score*=2
                             }

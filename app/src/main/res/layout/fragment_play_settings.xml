@@ -4,11 +4,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="50dp"
     tools:context=".PlaySettings">
 
     <Button
+        android:layout_marginTop="50dp"
         android:id="@+id/playSimonButton"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="20dp"
         android:paddingBottom="20dp"
@@ -16,7 +18,71 @@
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/livesEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        android:text="3"
+        android:hint="lives"
+        app:layout_constraintBottom_toTopOf="@+id/replayableSwitch"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timeLimitSecondsEditText" />
+
+    <EditText
+        android:id="@+id/timeLimitSecondsEditText"
+        android:layout_width="match_parent"
+        android:gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        android:text="90"
+        android:hint="time limit"
+        app:layout_constraintEnd_toEndOf="@+id/livesEditText"
+        app:layout_constraintStart_toStartOf="@+id/livesEditText"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Switch
+        android:id="@+id/replayableSwitch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:text="Repalyable"
+        app:layout_constraintBottom_toTopOf="@+id/playSimonButton"
+        app:layout_constraintEnd_toEndOf="@+id/livesEditText"
+        app:layout_constraintStart_toStartOf="@+id/livesEditText" />
+
+    <EditText
+        android:id="@+id/squareSizeEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        android:text="3"
+        android:hint="size of the grid"
+        app:layout_constraintBottom_toTopOf="@+id/replayableSwitch"
+        app:layout_constraintEnd_toEndOf="@+id/livesEditText"
+        app:layout_constraintStart_toStartOf="@+id/livesEditText"
+        app:layout_constraintTop_toBottomOf="@+id/livesEditText" />
+
+    <EditText
+        android:id="@+id/difficultyEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        android:text="9"
+        android:hint="number of keys"
+        app:layout_constraintBottom_toTopOf="@+id/livesEditText"
+        app:layout_constraintEnd_toEndOf="@+id/livesEditText"
+        app:layout_constraintStart_toStartOf="@+id/livesEditText"
+        app:layout_constraintTop_toBottomOf="@+id/timeLimitSecondsEditText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

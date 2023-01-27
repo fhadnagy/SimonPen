@@ -10,7 +10,7 @@
         <entry key="app/src/main/res/layout/container_frag.xml" value="0.23645833333333333" />
         <entry key="app/src/main/res/layout/fragment_about.xml" value="0.23645833333333333" />
         <entry key="app/src/main/res/layout/fragment_menu.xml" value="0.23645833333333333" />
-        <entry key="app/src/main/res/layout/fragment_play_settings.xml" value="0.23645833333333333" />
+        <entry key="app/src/main/res/layout/fragment_play_settings.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_simon_says.xml" value="0.23645833333333333" />
         <entry key="app/src/main/res/layout/fragment_story.xml" value="0.23645833333333333" />
         <entry key="app/src/main/res/layout/pager_item.xml" value="0.23541666666666666" />
