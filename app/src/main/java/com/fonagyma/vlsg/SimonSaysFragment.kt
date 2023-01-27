@@ -35,7 +35,7 @@ class SimonSaysFragment : Fragment() {
         binding.root.addView(ldView)
         ldView.resume()*/
 
-        gameView = SimonSaysView(requireContext(),binding.root.display.width.toInt(),binding.root.display.height.toInt(),4,3)
+        gameView = SimonSaysView(requireContext(),binding.root.display.width.toInt(),binding.root.display.height.toInt(),15,7)
         binding.root.addView(gameView)
         gameView.resume()
 
@@ -44,6 +44,16 @@ class SimonSaysFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onPause() {
+        gameView.pause()
+        super.onPause()
+    }
+
+    override fun onResume() {
+        gameView.resume()
+        super.onResume()
     }
 
 }

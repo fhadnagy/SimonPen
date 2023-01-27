@@ -31,9 +31,9 @@ class SimonSaysView(context: Context, width: Int, height: Int,val difficulty: In
     private var lastFrameMillis : Long = 0
     private var millis: Long= 0
     private var fps: Long = 0
-    private var showLengthMillis : Long = 1000
-    private var waitLengthMillis : Long = 1000
-    private var betweenPixelsMillis : Long = 300
+    private var showLengthMillis : Long = 300
+    private var waitLengthMillis : Long = 300
+    private var betweenPixelsMillis : Long = 100
     private var animationTimer = Timer(1000)
 
     //flow control variables
@@ -179,9 +179,9 @@ class SimonSaysView(context: Context, width: Int, height: Int,val difficulty: In
 
 
                 paint.style = Paint.Style.FILL
-                paint.textSize=maxSquareHeight/25f
+                paint.textSize=maxSquareHeight*.08f
                 //paint.color=(Color.argb(255, 11, 10, 5))
-                canvas.drawText("Time: ${gameTimer.get()/60000} : ${gameTimer.get()/1000}",maxSquareHeight*.4f, maxSquareHeight*.4f,paint)
+                canvas.drawText("Time: ${gameTimer.get()/60000} : ${(gameTimer.get()/1000)%60}",maxSquareHeight*.3f, maxSquareHeight*.2f,paint)
 
                 }else{
 
@@ -239,7 +239,7 @@ class SimonSaysView(context: Context, width: Int, height: Int,val difficulty: In
                        waitingForInput=true
                        setNow=false
                    }
-                   animationTimer.increase(waitLengthMillis)
+                   animationTimer.increase(betweenPixelsMillis)
                    true
                }
            }else{
