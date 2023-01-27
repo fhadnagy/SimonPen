@@ -8,6 +8,7 @@ import android.view.MotionEvent
 import android.view.SurfaceView
 import com.fonagyma.vlsg.R
 import java.lang.Float.min
+import kotlin.math.floor
 import kotlin.math.pow
 import kotlin.math.sqrt
 import kotlin.random.Random
@@ -20,7 +21,7 @@ class SimonSaysView(context: Context, width: Int, height: Int,val difficulty: In
     private var maxSquareHeight = min(surfaceSize.x,surfaceSize.y)
     private var squareStartPointF= PointF(0f+(surfaceSize.x-maxSquareHeight)/2f+maxSquareHeight*.02f,0f+(surfaceSize.y-maxSquareHeight)/2f+maxSquareHeight*.02f)
     private var squareRectF = RectF(squareStartPointF.x,squareStartPointF.y,squareStartPointF.x+maxSquareHeight*.96f,squareStartPointF.y+maxSquareHeight*.96f)
-    private var cellSize = maxSquareHeight/size
+    private var cellSize = maxSquareHeight*.96f/size
 
     private var paint = Paint()
     private var paintTrue = Paint()
@@ -98,9 +99,9 @@ class SimonSaysView(context: Context, width: Int, height: Int,val difficulty: In
                     for (y in 0 until size){
                         if((x+y)%2==0)
                         {
-                            canvas.drawRect(xyToRectF(x,y),paint)
+                            canvas.drawRect(xyToRectF(x,y),paintTrue)
                         }else{
-
+                            canvas.drawRect(xyToRectF(x,y),paintFalse)
                         }
                     }
                 }
@@ -129,6 +130,13 @@ class SimonSaysView(context: Context, width: Int, height: Int,val difficulty: In
 
     private fun xyToRectF(x: Int, y: Int): RectF {
         return RectF(squareStartPointF.x+cellSize*x,squareStartPointF.y+cellSize*y,squareStartPointF.x+cellSize*(x+1),squareStartPointF.y+cellSize*(y+1))
+    }
+
+    private fun getCellIndex(point: PointF): Int{
+        var x : Int = (point.x/cellSize).toInt()
+        var y : Int = (point.y/cellSize).toInt()
+        Log.d("click","You clicked $x : $y")
+        return (x+ y * size)
     }
 
     private fun update(millis: Long){
@@ -175,7 +183,8 @@ class SimonSaysView(context: Context, width: Int, height: Int,val difficulty: In
                 gameOver= false
                 paused=false
             }else {
-
+                var index = getCellIndex(PointF(motionEvent.x-squareStartPointF.x,motionEvent.y-squareStartPointF.y))
+                Log.d("getindex", "$index")
             }
         }
         return true

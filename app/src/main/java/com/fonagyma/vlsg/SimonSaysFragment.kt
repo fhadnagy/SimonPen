@@ -34,7 +34,7 @@ class SimonSaysFragment : Fragment() {
         /*val ldView = OLDLiveDrawingView(requireContext(),binding.root.display.width.toInt(),binding.root.display.height.toInt())
         binding.root.addView(ldView)
         ldView.resume()*/
-        gameView = SimonSaysView(requireContext(),binding.root.display.width.toInt(),binding.root.display.height.toInt())
+        gameView = SimonSaysView(requireContext(),binding.root.display.width.toInt(),binding.root.display.height.toInt(),1,5)
         binding.root.addView(gameView)
         gameView.resume()
 
